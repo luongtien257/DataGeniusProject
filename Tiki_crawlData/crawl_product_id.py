@@ -44,35 +44,58 @@ import pandas as pd
 # }
 
 headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
     'Accept': 'application/json, text/plain, */*',
-    'Accept-Language': 'vi-VN,vi;q=0.8,en-US;q=0.5,en;q=0.3',
+    'Accept-Language': 'vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7,fr-FR;q=0.6,fr;q=0.5',
     'Referer': 'https://tiki.vn/?src=header_tiki',
-    'x-guest-token': '8jWSuIDBb2NGVzr6hsUZXpkP1FRin7lY',
+    'x-guest-token': 'tMyERhlSsijKfF7I382o5uaUqT9gGDHN',
     'Connection': 'keep-alive',
     'TE': 'Trailers',
 }
 
 params = {
-    'limit': '48',
+    'limit': '40',
     'include': 'sale-attrs,badges,product_links,brand,category,stock_item,advertisement',
-    'aggregations': '1',
-    'trackity_id': '70e316b0-96f2-dbe1-a2ed-43ff60419991',
-    'category': '1883',
+    'aggregations': '2',
+    'trackity_id': 'c05e3a49-602d-c4d1-c714-f5ae4bbd9470',
+    'category': '316',
     'page': '1',
-    'src': 'c1883',
-    'urlKey':  'nha-cua-doi-song',
+    'src': 'c316',
+    'urlKey':  'sach-truyen-tieng-viet',
 }
 
+#Choose the input category
+category_stack = [('sach-kinh-te', 846, 'c846')]
 product_id = []
-for i in range(1, 11):
-    params['page'] = i
-    response = requests.get('https://tiki.vn/api/v2/products', headers=headers, params=params)#, cookies=cookies)
-    if response.status_code == 200:
-        print('request success!!!')
-        for record in response.json().get('data'):
-            product_id.append({'id': record.get('id')})
-    time.sleep(random.randrange(3, 10))
 
+while category_stack:
+    params['urlKey'], params['category'], params['src'] = category_stack.pop()
+    params['page'] = 1
+    response_category = requests.get('https://tiki.vn/api/personalish/v1/blocks/listings', 
+                            headers=headers, params=params)#, cookies=cookies)
+    if response_category.status_code == 200:
+        print('{} category: success!'.format(params['urlKey']))
+        filters = response_category.json().get('filters')[0]
+        # Update sub-category to the stack
+        if filters['query_name'] == 'category': 
+            categories = filters.get('values')
+            for category in categories:
+                category_stack.append((category['url_key'], 
+                                       category['query_value'], 
+                                       'c' + str(category['query_value'])))
+            time.sleep(random.randrange(3, 10))
+        # Get the id
+        else: 
+            for i in range(1, 51):
+                params['page'] = i
+                response_id = requests.get('https://tiki.vn/api/v2/products', 
+                                        headers=headers, params=params)#, cookies=cookies)
+                if response_id.status_code == 200:
+                    print('{0} category, page {1}: success!'.format(params['urlKey'], i))
+                    for record in response_id.json().get('data'):
+                        product_id.append({'id': record.get('id')})
+                time.sleep(random.randrange(3, 10)) 
+
+#Save the dataframe
 df = pd.DataFrame(product_id)
-df.to_csv('product_id_ncds.csv', index=False)
+df.to_csv('product-id.csv', index=False)
