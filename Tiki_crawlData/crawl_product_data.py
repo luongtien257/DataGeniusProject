@@ -114,7 +114,7 @@ def parser_product(json):
     return d
 
 # Import the product-id file, and remove duplicates
-df_id = pd.read_csv('product-id.csv')
+df_id = pd.read_csv('Data/product-id.csv')
 print('Before removing duplicates: ', len(df_id))
 df_id = df_id.drop_duplicates()
 print('After removing duplicates: ', len(df_id))
@@ -131,7 +131,7 @@ for pid in tqdm(p_ids, total=len(p_ids)):
     if len(result) == 1000:
         i += 1
         df_product = pd.DataFrame(result)
-        df_product.to_csv('product-data-{}.csv'.format(i), index=False, encoding='utf-8-sig')
+        df_product.to_csv('Data/product-data-{}.csv'.format(i), index=False, encoding='utf-8-sig')
         result = []
         time.sleep(random.randrange(20, 30))
     else: 

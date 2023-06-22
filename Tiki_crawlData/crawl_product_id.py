@@ -98,4 +98,4 @@ while category_stack:
 
 #Save the dataframe
 df = pd.DataFrame(product_id)
-df.to_csv('product-id.csv', index=False)
+df.to_csv('Data/product-id.csv', index=False)
