@@ -10,7 +10,7 @@ I used Python *requests* library to access the Tiki's public API, following this
 ## 3. EDA Process
 * Data cleaning: The detail cleanlog is written in the *EDA.ipynb* file. After the cleaning step, the data size reduced to 14399 product-id.
 * Analyze the dataset based on 4 criteria: **Quantity distribution, Correlation between quantities, Category Comparison, Repeated Words and Best Seller**
-* Use mainly the *plotly* library to create interactive visualizations. 
+* Use mainly the *matplotlib* library to create interactive visualizations. 
 ## 4. Machine Learning models
 ## 5. References
 1. https://youtu.be/4ANrdE3FDPw'
