@@ -9,8 +9,12 @@ I used Python *requests* library to access the Tiki's public API, following this
 * Modify the *parser_product* function to get the essential parameters in each product. Then export the .csv file for every 1000 collected product records.
 ## 3. EDA Process
 * Data cleaning: The detail cleanlog is written in the *EDA.ipynb* file. After the cleaning step, the data size reduced to 14399 product-id.
-* Analyze the dataset based on 4 criteria: **Quantity distribution, Correlation between quantities, Category Comparison, Repeated Words and Best Seller**
+* Analyze the dataset based on 4 criteria: **Quantity distribution, Correlation between quantities, Category Comparison, and Other Aspects.**
 * Use mainly the *matplotlib* library to create interactive visualizations. 
 ## 4. Machine Learning models
+* Data processing: Name cleaning, Category numberization.
+* Price Prediction: Use **Linear Regression model** to estimate the price based on numeric non-currency fields.
+* Category classification: Use **Random Forest Classifier model** to classify the product based on its name.
+* Popularity Clustering: Use **K-mean Clustering model** to categorize the popularity of the products.
 ## 5. References
 1. https://youtu.be/4ANrdE3FDPw'
